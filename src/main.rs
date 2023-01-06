@@ -36,14 +36,13 @@ fn main() -> io::Result<()> {
     let files_arc = Arc::new(Mutex::new(Vec::with_capacity(50_000))); // vector of tuples (direntry, modification date)
                                                                       // we saving time here to do less statx calls during sorting
     maildirs.par_iter().for_each(|mdir| {
-        if let Ok(dir_iter) = fs::read_dir(&mdir) {
+        if let Ok(mut dir_iter) = fs::read_dir(&mdir) {
             let clone = Arc::clone(&files_arc);
-            for file in dir_iter {
-                let f = file.unwrap();
-                let date = f.metadata().unwrap().modified().unwrap();
+            while let Some(Ok(file)) = dir_iter.next() {
+                let date = file.metadata().unwrap().modified().unwrap();
                 {
                     let mut v = clone.lock();
-                    v.push((f, date));
+                    v.push((file, date));
                 }
             }
         }
