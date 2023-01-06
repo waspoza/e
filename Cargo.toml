@@ -5,9 +5,10 @@ authors = ["piotr"]
 edition = "2018"
 
 [profile.release]
-debug = true
+debug = false
+strip = true
 #opt-level = 3
-opt-level = 'z'  # Optimize for size.
+opt-level = 's'  # Optimize for size.
 panic = 'abort'
 lto = true
 codegen-units = 1

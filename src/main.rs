@@ -62,7 +62,6 @@ fn main() -> io::Result<()> {
         None => return Ok(()),
     };
 
-    let counter = AtomicUsize::new(0);
     let min = cmp::min(files.len(), 300);
     let _found = files.par_iter().take(min).find_any(|file| {
         let filename = file.0.path();
