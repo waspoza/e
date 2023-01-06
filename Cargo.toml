@@ -24,7 +24,7 @@ term_size = "0.3.1"
 rayon = "1.6.1"
 parking_lot = "0.12.1"
 mimalloc = { version = "0.1.32", default-features = false }
-tokio = { package = "tokio", version = "1.23.1", features = ["macros", "fs", "rt-multi-thread", "parking_lot"] }
+#tokio = { package = "tokio", version = "1.23.1", features = ["macros", "fs", "rt-multi-thread", "parking_lot"] }
 
 #[[bin]]
 #path = "src/test.rs"

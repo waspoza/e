@@ -39,10 +39,9 @@ fn main() -> io::Result<()> {
         if let Ok(mut dir_iter) = fs::read_dir(&mdir) {
             let clone = Arc::clone(&files_arc);
             while let Some(Ok(file)) = dir_iter.next() {
-                let date = file.metadata().unwrap().modified().unwrap();
-                {
-                    let mut v = clone.lock();
-                    v.push((file, date));
+                if let Ok(date) = file.metadata().and_then(|md| md.modified()) {
+                    let mut files_vec = clone.lock();
+                    files_vec.push((file, date));
                 }
             }
         }
