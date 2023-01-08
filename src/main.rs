@@ -8,7 +8,7 @@ use std::fs::{self, File};
 use std::io::prelude::*;
 use std::io::{self, SeekFrom};
 use std::sync::Arc;
-use std::{cmp, env};
+use std::env;
 
 #[global_allocator]
 static GLOBAL: MiMalloc = MiMalloc;
@@ -60,8 +60,7 @@ fn main() -> io::Result<()> {
         None => return Ok(()),
     };
 
-    let min = cmp::min(files.len(), 300);
-    let _found = files.par_iter().take(min).find_any(|file| {
+    let _found = files.par_iter().take(300).find_any(|file| {
         let filename = file.0.path();
         let mut buffer = vec![0; 4 * 1024];
         let mut two_bytes = vec![0u8; 2];
