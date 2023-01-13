@@ -15,8 +15,7 @@ static GLOBAL: MiMalloc = MiMalloc;
 
 fn main() -> io::Result<()> {
     //let homes = fs::read_dir("/home/piotr/mail/")?.collect::<Result<Vec<_>, io::Error>>()?;
-    let homes =
-        fs::read_dir("/root/docker/dovecot/data/mail/")?.collect::<Result<Vec<_>, io::Error>>()?;
+    let homes = fs::read_dir("/root/docker/dovecot/data/mail/")?.collect::<Result<Vec<_>, io::Error>>()?;
     let dirs = vec![
         "Maildir/new/",
         "Maildir/cur/",
@@ -59,6 +58,7 @@ fn main() -> io::Result<()> {
         Some(n) => n,
         None => return Ok(()),
     };
+    let print_all = env::args().nth(2);
 
     let _found = files.par_iter().take(300).find_any(|file| {
         let filename = file.0.path();
@@ -77,6 +77,9 @@ fn main() -> io::Result<()> {
         }
         if buffer.contains_str(&needle[..]) {
             println!("foundz: {} in {}", needle, &filename.display());
+            if print_all.is_some() { // print all mails found
+                return false
+            }
             let mut buf = vec![];
             f.seek(SeekFrom::Start(0)).unwrap();
             if gzipped {
